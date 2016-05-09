@@ -1,5 +1,5 @@
 [package]
-name = "matasano-crypto-challenges"
+name = "rust-matasano-crypto-challenges"
 version = "0.1.0"
 authors = ["Stallmanifold <stallmanifold@gmail.com>"]
 
