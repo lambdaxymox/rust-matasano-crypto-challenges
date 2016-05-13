@@ -2,6 +2,7 @@ use std::string::String;
 use super::base64;
 use super::hex_rep::ToHexRep;
 use super::bitwiseops;
+use super::stringops;
 
 #[test]
 fn test_to_base64() {
@@ -29,6 +30,8 @@ fn test_to_hex() {
     assert_eq!(expected, result);
 }
 
+
+
 #[test]
 fn test_challenge1() {
     let hex_str  = String::from("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d");
@@ -54,4 +57,11 @@ fn test_challenge2() {
 
     assert_eq!(expected.len(), result.len());
     assert_eq!(expected, result);
+}
+
+#[test]
+fn test_challenge3() {
+    
+
+    let expected = String::from("Cooking MC's like a pound of bacon");
 }
