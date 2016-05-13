@@ -1,6 +1,6 @@
 use std::collections::hash_map::HashMap;
 
-const frequency_table: HashMap<u8, f64> = 
+const raw_frequency_table: HashMap<u8, f64> = 
     HashMap::new()
             .insert('E' as u8, 0.12702).insert('T' as u8, 0.09056).insert('E' as u8, 0.12702)
             .insert('T' as u8, 0.09056).insert('A' as u8, 0.08167).insert('O' as u8, 0.07507)
@@ -12,3 +12,7 @@ const frequency_table: HashMap<u8, f64> =
             .insert('B' as u8, 0.01492).insert('V' as u8, 0.00978).insert('K' as u8, 0.00772)
             .insert('J' as u8, 0.00153).insert('X' as u8, 0.00150).insert('Q' as u8, 0.00095)
             .insert('Z' as u8, 0.00074);
+
+fn score_func() -> f64 {
+    0.0
+}

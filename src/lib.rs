@@ -1,4 +1,5 @@
 extern crate rustc_serialize;
+extern crate num_rational;
 
 pub mod base64;
 pub mod hex_rep;
