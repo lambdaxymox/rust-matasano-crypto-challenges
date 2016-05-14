@@ -72,6 +72,10 @@ impl<T> Histogram<T> where T: Eq + Hash {
         self.inner.get(key).and_then(|value| { Some(*value) })
     }
 
+    pub fn contains_key(&self, key: &T) -> bool {
+        self.inner.contains_key(key)
+    }
+
 }
 /*
 pub struct IterRaw<T> {

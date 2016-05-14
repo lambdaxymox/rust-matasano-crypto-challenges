@@ -1,5 +1,6 @@
 use std::ops::BitXor;
 use std::cmp;
+use std::iter;
 
 
 pub fn block_xor<T>(block1: &[T], block2: &[T]) -> Vec<T::Output> 
@@ -26,3 +27,60 @@ pub fn exact_block_xor<T>(block1: &[T], block2: &[T]) -> Option<Vec<T::Output>>
     Some(block_xor(block1, block2))
 }
 
+fn repeat_char(character: u8, n: usize) -> Vec<u8> {
+    iter::repeat(character).take(n).collect()
+}
+
+fn repeat_string(string: &[u8], n: usize) -> Vec<u8> {
+    let mut vec = Vec::new();
+
+    for i in 0..n {
+        for ch in string {
+            vec.push(*ch);
+        }
+    }
+
+    vec
+}
+
+fn with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
+    let rep_count = string.len() / key.len();
+    let remainder = string.len() % key.len();
+    let mut vec = Vec::new();
+
+    for i in 0..rep_count {
+        for ch in string {
+            vec.push(*ch);
+        }
+    }
+
+    for i in 0..remainder {
+        vec.push(string[i]);
+    }    
+
+    vec
+}
+
+fn op_with_char<F>(op: F, character: u8, string: &[u8]) -> Vec<u8>
+    where F: Fn(&[u8], &[u8]) -> Vec<u8> {
+
+    let other_string = repeat_char(character, string.len());
+
+    op(string, &other_string)
+}
+
+pub fn xor_with_char(character: u8, string: &[u8]) -> Vec<u8> {
+    op_with_char(&block_xor, character, string)
+}
+
+fn op_with_key<F>(op: F, key: &[u8], string: &[u8]) -> Vec<u8>
+    where F: Fn(&[u8], &[u8]) -> Vec<u8> {
+
+    let other_string = with_key(key, string);
+
+    op(string, &other_string)
+}
+
+pub fn xor_with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
+    op_with_key(&block_xor, key, string)
+}
