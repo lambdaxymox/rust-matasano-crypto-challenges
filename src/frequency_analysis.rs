@@ -1,56 +1,202 @@
 use std::collections::hash_map::HashMap;
 use num_rational::Ratio;
+use std::convert::From;
+use std::hash::Hash;
+use std::collections::hash_map;
+use std::cmp;
+use std::borrow::Borrow;
+use std::iter::Iterator;
 
 
-fn compute_letter_counts(corpus: &[u8]) -> HashMap<u8, usize> {
-    let mut table = HashMap::<u8, usize>::new();
+#[derive(Clone)]
+pub struct Histogram<T> {
+    size:  usize,
+    inner: HashMap<T, usize>,
+}
 
-    for character in corpus {
-        if table.contains_key(&character) {
-            *table.get_mut(&character).unwrap() += 1;
-        } else {
-            table.insert(*character, 1);
+impl<T> Histogram<T> where T: Eq + Hash {
+    pub fn new() -> Histogram<T> {
+        Histogram {
+            size: 0,
+            inner: HashMap::new(),
         }
     }
 
-    table
+    fn pack(size: usize, map: HashMap<T, usize>) -> Histogram<T> {
+        Histogram {
+            size: size,
+            inner: map,
+        }
+    }
+
+    pub fn size(&self) -> usize {
+        self.size
+    }
+
+    pub fn len(&self) -> usize {
+        self.inner.len()
+    }
+
+    pub fn transpose(&self, reference: &Histogram<T>) -> Histogram<T> 
+        where T: Copy + Clone + Ord {
+
+        let mut map = HashMap::new();
+        let size    = cmp::min(self.len(), reference.len());
+
+        let mut keys = Vec::new();
+        for key in reference.inner.keys() {
+            keys.push(key.clone());
+        }
+        keys.sort();
+
+        let mut values = Vec::new();
+        for value in self.inner.values() {
+            values.push(value.clone());
+        }
+        values.sort();
+
+
+        for i in 0..size {
+            map.insert(keys[i], values[i]);
+        }
+
+        Histogram::pack(size, map)
+    }
+
+    pub fn get(&self, key: &T) -> Option<Ratio<usize>> {
+        self.inner.get(key)
+                  .and_then(|value| { Some(Ratio::new_raw(*value, self.size)) })
+    }
+
+    pub fn get_count(&self, key: &T) -> Option<usize> {
+        self.inner.get(key).and_then(|value| { Some(*value) })
+    }
+
+}
+/*
+pub struct IterRaw<T> {
+    inner: hash_map::IntoIter<T, usize>,
 }
 
-fn histogram_size(counts: &HashMap<u8, usize>) -> usize {
-    counts.values().fold(0, |acc: usize, count: &usize| { acc + *count })
+impl<T> Iterator for IterRaw<T> {
+    type Item = (T, usize);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next()
+    }
 }
-
-fn to_histogram(counts: &HashMap<u8, usize>) -> HashMap<u8, Ratio<usize>> {
-    let total = histogram_size(counts);
-
-    counts.into_iter()
-          .map(|(key, value): (&u8, &usize)| {(*key, Ratio::new_raw(*value, total))})
-          .collect()
-}
-
-fn relative_freqs(corpus: &[u8]) -> HashMap<u8, Ratio<usize>> {
-    to_histogram(&compute_letter_counts(corpus))
-}
-
-fn transpose_histograms(reference: &HashMap<u8, Ratio<usize>>, freqs: &HashMap<u8, Ratio<usize>>) -> HashMap<u8, Ratio<usize>> {
-    let mut map      = HashMap::new();
+*/
+impl<'a, T> From<&'a [T]> for Histogram<T> where T: Eq + Hash + Copy {
+    fn from(corpus: &'a [T]) -> Histogram<T> {
+        let mut table = HashMap::new();
     
-    let mut keys = Vec::new();
-    for key in reference.keys() {
-        keys.push(key.clone());
+        for item in corpus {
+            if table.contains_key(item) {
+                *table.get_mut(item).unwrap() += 1;
+            } else {
+                table.insert(*item, 1);
+            }
+        }
+
+        Histogram::pack(corpus.len(), table)
     }
-    keys.sort();
+}
 
-    let mut values = Vec::new();
-    for value in freqs.values() {
-        values.push(value.clone());
+impl<T> From<Vec<(T, usize)>> for Histogram<T> where T: Eq + Hash {
+    fn from(corpus: Vec<(T, usize)>) -> Histogram<T> {
+        let mut table        = HashMap::new();
+        let mut total: usize = 0; 
+
+        for (key, value) in corpus {
+            table.insert(key, value);
+            total += value;
+        }
+
+        Histogram::pack(total, table)
     }
-    values.sort();
+}
 
+impl<'a, T> From<&'a [(T, usize)]> for Histogram<T> where T: Eq + Hash + Copy {
+    fn from(corpus: &'a [(T, usize)]) -> Histogram<T> {
+        let mut table = HashMap::new();
+        let mut total: usize = 0;
 
-    for i in 0..keys.len() {
-        map.insert(keys[i], values[i]);
+        for ref kv in corpus {
+            table.insert(kv.0, kv.1);
+            total += kv.1;
+        }
+        
+        Histogram::pack(total, table)
     }
+}
 
-    map
+pub struct IntoIter<T> {
+    total: usize,
+    inner: hash_map::IntoIter<T, usize>,
+}
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = (T, Ratio<usize>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next().and_then(|(key, value)| { Some((key, Ratio::new_raw(value, self.total)))})
+    }
+}
+
+pub struct IterRef<'a, T: 'a> {
+    inner: hash_map::Iter<'a, T, usize>,
+}
+
+impl<'a, T> Iterator for IterRef<'a, T> {
+    type Item = (&'a T, &'a usize);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next()
+    }
+}
+
+pub struct IterMut<'a, T: 'a> {
+    inner: hash_map::IterMut<'a, T, usize>,
+}
+
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = (&'a T, &'a mut usize);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next()
+    }
+} 
+
+impl<T> IntoIterator for Histogram<T> where T: Eq + Hash {
+    type Item = (T, Ratio<usize>);
+    type IntoIter = IntoIter<T>;
+
+    fn into_iter(self) -> IntoIter<T> {
+        IntoIter {
+            total: self.size,
+            inner: self.inner.into_iter(),
+        }
+    }
+}
+
+impl<'a, T> IntoIterator for &'a Histogram<T> where T: Eq + Hash {
+    type Item = (&'a T, &'a usize);
+    type IntoIter = IterRef<'a, T>;
+
+    fn into_iter(self) -> IterRef<'a, T> {
+        IterRef {
+            inner: self.inner.iter()
+        }
+    }
+}
+
+impl<'a, T> IntoIterator for &'a mut Histogram<T> where T: Eq + Hash {
+    type Item = (&'a T, &'a mut usize);
+    type IntoIter = IterMut<'a, T>;
+
+    fn into_iter(self) -> IterMut<'a, T> {
+        IterMut {
+            inner: self.inner.iter_mut()
+        }
+    }
 }
