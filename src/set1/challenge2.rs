@@ -1,4 +1,5 @@
-use super::bitwiseops;
+use bitwise::bitwiseops;
+use bitwise::hex_rep::ToHexRep;
 
 fn challenge2() {
     let hex1  = String::from("1c0111001f010100061a024b53535009181c").to_hex().unwrap();

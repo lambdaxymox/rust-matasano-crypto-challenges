@@ -31,6 +31,7 @@ fn repeat_char(character: u8, n: usize) -> Vec<u8> {
     iter::repeat(character).take(n).collect()
 }
 
+#[allow(unused_variables)]
 fn repeat_string(string: &[u8], n: usize) -> Vec<u8> {
     let mut vec = Vec::new();
 
@@ -43,6 +44,7 @@ fn repeat_string(string: &[u8], n: usize) -> Vec<u8> {
     vec
 }
 
+#[allow(unused_variables)]
 fn with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
     let rep_count = string.len() / key.len();
     let remainder = string.len() % key.len();

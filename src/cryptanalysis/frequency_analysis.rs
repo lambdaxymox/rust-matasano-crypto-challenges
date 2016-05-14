@@ -4,7 +4,6 @@ use std::convert::From;
 use std::hash::Hash;
 use std::collections::hash_map;
 use std::cmp;
-use std::borrow::Borrow;
 use std::iter::Iterator;
 
 
@@ -77,19 +76,7 @@ impl<T> Histogram<T> where T: Eq + Hash {
     }
 
 }
-/*
-pub struct IterRaw<T> {
-    inner: hash_map::IntoIter<T, usize>,
-}
 
-impl<T> Iterator for IterRaw<T> {
-    type Item = (T, usize);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.inner.next()
-    }
-}
-*/
 impl<'a, T> From<&'a [T]> for Histogram<T> where T: Eq + Hash + Copy {
     fn from(corpus: &'a [T]) -> Histogram<T> {
         let mut table = HashMap::new();

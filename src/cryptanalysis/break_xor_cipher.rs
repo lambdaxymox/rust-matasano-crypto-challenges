@@ -1,14 +1,14 @@
-use super::frequency_analysis::Histogram;
+use cryptanalysis::frequency_analysis::Histogram;
 use num_rational::Ratio;
 use std::iter::IntoIterator;
 use std::hash::Hash;
-use bitwiseops::xor_with_char;
+use bitwise::bitwiseops::xor_with_char;
 
 
 fn score_func<T>(model: &Histogram<T>, freqs: &Histogram<T>) -> Ratio<usize>
     where T: Eq + Hash {
 
-    freqs.into_iter().fold(Ratio::from_integer(0), |score, (key, val)| { 
+    freqs.into_iter().fold(Ratio::from_integer(0), |score, (key, _)| { 
         if model.contains_key(key) {
             score + model.get(key).unwrap()
         } else {

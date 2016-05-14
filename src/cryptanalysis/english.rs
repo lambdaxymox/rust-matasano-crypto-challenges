@@ -1,5 +1,3 @@
-use std::collections::hash_map::HashMap;
-use num_rational::Ratio;
 use std::convert::From;
 use super::frequency_analysis::Histogram;
 use super::break_xor_cipher;
@@ -48,11 +46,11 @@ const ENGLISH_LETTERS: [u8; 52] = ['A' as u8,'B' as u8,'C' as u8,'D' as u8,'E' a
                                    't' as u8,'u' as u8,'v' as u8,'w' as u8,'x' as u8,
                                    'y' as u8,'z' as u8];
 
-pub fn most_likely_char(cipher_text: &[u8]) -> (u8, Ratio<usize>) {
+pub fn most_likely_char(cipher_text: &[u8]) -> u8 {
     // Converting the frequency table to a histogram every time to score a string is really expensive,
     // but I don't know of a better way to do it that compiles.
     // TODO: Find a better way to do this.
     let frequency_table = Histogram::from(FREQUENCY_LIST.as_ref());
 
-    break_xor_cipher::break_xor_char(&frequency_table, &ENGLISH_LETTERS, cipher_text)
+    break_xor_cipher::break_xor_char(&frequency_table, &ENGLISH_LETTERS, cipher_text).0
 }
