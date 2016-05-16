@@ -2,6 +2,7 @@ use super::xor_cipher::{SingleCharXorCipher, BlockCipher};
 use std::convert::From;
 use std::string::String;
 
+
 #[test]
 fn test_xor_cipher() {
     let plaintext   = Vec::from("Super duper secret text");
@@ -25,6 +26,15 @@ fn test_xor_cipher() {
 
     assert_eq!(String::from_utf8(ciphertext).unwrap(), String::from_utf8((expected_ct)).unwrap());
     assert_eq!(String::from_utf8(plaintext).unwrap(), expected);
+}
 
+#[test]
+fn test_xor_cipher_should_reproduce_plaintext() {
+    let plaintext: Vec<u8>  = Vec::from("Super duper secret text");
+    let key: u8             = 'x' as u8;
+    let cipher              = SingleCharXorCipher::new(key);
+    let ciphertext: Vec<u8> = cipher.process_block(plaintext.as_ref());
+    let guessed_plaintext   = cipher.process_block(ciphertext.as_ref());
 
+    assert_eq!(plaintext, guessed_plaintext);
 }

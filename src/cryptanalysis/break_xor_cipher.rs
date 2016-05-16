@@ -21,13 +21,13 @@ pub fn score_with<T>(model: &Histogram<T>, string: &[T]) -> Ratio<usize>
 pub fn max_char_with(model: &Histogram<u8>, charset: &[u8], string: &[u8]) -> (u8, Ratio<usize>) {
     let mut max_score = Ratio::from_integer(0);
     let mut max_char  = 0x00;
-
+    
     for ch in charset {
-        let cipher = SingleCharXorCipher::new(*ch);
+        let cipher      = SingleCharXorCipher::new(*ch);
         let cipher_text = cipher.process_block(&string);
-        let score = score_with(model, &cipher_text);
+        let score       = score_with(model, &cipher_text);
 
-        if score > max_score {
+        if score >= max_score {
             max_score = score;
             max_char  = *ch;
         }

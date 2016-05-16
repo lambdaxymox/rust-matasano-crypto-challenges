@@ -3,6 +3,22 @@ use super::english;
 use std::convert::From;
 use crypto::xor_cipher::SingleCharXorCipher;
 use crypto::xor_cipher::BlockCipher;
+use num_rational::Ratio;
+use super::frequency_analysis::Histogram;
+use std::collections::HashMap;
+
+
+fn make_table(array: &[(u8, usize)]) -> (usize, HashMap<u8,usize>) {
+    let mut table = HashMap::new();
+    let mut total = 0;
+
+    for ref kv in array {
+        table.insert(kv.0, kv.1);
+        total += kv.1;
+    }
+
+    (total, table)
+}
 
 #[test]
 fn test_most_likely_byte() {
@@ -11,8 +27,8 @@ fn test_most_likely_byte() {
     let cipher     = SingleCharXorCipher::new(key);
     let ciphertext = cipher.process_block(plaintext.as_ref());
 
-    let guessed_key = english::most_likely_byte(ciphertext.as_slice());
-    let guessed_cipher = SingleCharXorCipher::new(guessed_key);
+    let guessed_key       = english::most_likely_byte(ciphertext.as_slice());
+    let guessed_cipher    = SingleCharXorCipher::new(guessed_key);
     let guessed_plaintext = guessed_cipher.process_block(ciphertext.as_slice());
 
     assert_eq!(key, guessed_key);
@@ -21,24 +37,8 @@ fn test_most_likely_byte() {
 
 #[test]
 fn test_score_with() {
-    use num_rational::Ratio;
-    use std::collections::HashMap;
-    use super::frequency_analysis::Histogram;
-    use std::convert::From;
-
-    fn make_table(array: &[(u8, usize)]) -> (usize, HashMap<u8,usize>) {
-        let mut table = HashMap::new();
-        let mut total = 0;
-
-        for ref kv in array {
-            table.insert(kv.0, kv.1);
-            total += kv.1;
-        }
-
-        (total, table)
-    }
-
     let plaintext = Vec::from("Cooking MC\'s like a pound of bacon");
+
     let (total, table): (usize, HashMap<u8,usize>)
          = make_table(english::FREQUENCY_LIST.as_ref());
 
