@@ -42,8 +42,8 @@ fn test_score_with() {
     let (total, table): (usize, HashMap<u8,usize>)
          = make_table(english::FREQUENCY_LIST.as_ref());
 
-    let model     = Histogram::from(english::FREQUENCY_LIST.as_ref());
-    let score     = break_xor_cipher::score_with(&model, plaintext.as_ref());
+    let model = Histogram::from(english::FREQUENCY_LIST.as_ref());
+    let score = break_xor_cipher::score_with(&model, plaintext.as_ref());
 
     let mut expected_score = Ratio::from_integer(0);
     for ch in plaintext.into_iter() {
