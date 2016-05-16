@@ -1,5 +1,6 @@
 extern crate rustc_serialize;
 extern crate num_rational;
+extern crate buffer;
 
 pub mod bitwise;
 pub mod cryptanalysis;

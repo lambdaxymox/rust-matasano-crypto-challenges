@@ -6,3 +6,4 @@ authors = ["Stallmanifold <stallmanifold@gmail.com>"]
 [dependencies]
 rustc-serialize = "0.3.19"
 num-rational    = "0.1.32"
+buffer          = "0.1.5"
