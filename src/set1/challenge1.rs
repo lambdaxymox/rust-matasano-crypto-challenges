@@ -3,7 +3,7 @@ use bitwise::hex_rep::ToHexRep;
 use challengeinfo::challenge::{Challenge, ChallengeInfo};
 
 
-pub const info1: ChallengeInfo<'static> = ChallengeInfo {
+pub const INFO1: ChallengeInfo<'static> = ChallengeInfo {
     set_number: 1,
     challenge_number: 1,
     title: "Convert hex to base64",
@@ -11,8 +11,8 @@ pub const info1: ChallengeInfo<'static> = ChallengeInfo {
     url: "http://cryptopals.com/sets/1/challenges/1",
 };
 
-pub const challenge1: Challenge<'static> = Challenge {
-    info: info1,
+pub const CHALLENGE1: Challenge<'static> = Challenge {
+    info: INFO1,
     func: execute,
 };
 

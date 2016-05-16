@@ -1,6 +1,6 @@
 use bitwise::bitwiseops;
 
-trait BlockCipher {
+pub trait BlockCipher {
     fn process_block(&self, input: &[u8]) -> Vec<u8>;
 }
 
@@ -9,7 +9,7 @@ pub struct SingleCharXorCipher {
 }
 
 impl SingleCharXorCipher {
-    fn new(key: u8) -> SingleCharXorCipher {
+    pub fn new(key: u8) -> SingleCharXorCipher {
         SingleCharXorCipher {
             key: key,
         }
