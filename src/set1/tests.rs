@@ -33,15 +33,14 @@ fn test_challenge2() {
 
 #[test]
 fn test_challenge3() {
-    let cipher_text = String::from("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
-                             .to_hex().unwrap();
-    let key = 88 as u8;
-    let guessed_char = english::most_likely_byte(cipher_text.as_slice());
-    let plain_text = String::from_utf8(bitwiseops::xor_with_char(guessed_char, cipher_text.as_slice())).unwrap();
+    let ciphertext = String::from("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
+                              .to_hex().unwrap();
+    let expected_plaintext = Vec::from("Cooking MC's like a pound of bacon");
+    let key                = 0x58 as u8;
+    let guessed_byte       = english::most_likely_byte(ciphertext.as_slice());
+    let guessed_plaintext  = bitwiseops::xor_with_char(guessed_byte, ciphertext.as_slice());
 
-    let expected = String::from("Cooking MC's like a pound of bacon");
-
-    assert_eq!(key, guessed_char);
-    assert_eq!(expected.len(), plain_text.len());
-    assert_eq!(expected, plain_text);
+    assert_eq!(key, guessed_byte);
+    assert_eq!(expected_plaintext.len(), guessed_plaintext.len());
+    assert_eq!(expected_plaintext, guessed_plaintext);
 }

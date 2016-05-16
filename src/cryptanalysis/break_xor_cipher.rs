@@ -36,24 +36,6 @@ pub fn max_char_with(model: &Histogram<u8>, charset: &[u8], string: &[u8]) -> (u
     (max_char, max_score)
 }
 
-pub fn min_char_with(model: &Histogram<u8>, charset: &[u8], string: &[u8]) -> (u8, Ratio<usize>) {
-    let mut min_score = Ratio::from_integer(0);
-    let mut min_char  = 0x00;
-
-    for ch in charset {
-        let cipher = SingleCharXorCipher::new(*ch);
-        let cipher_text = cipher.process_block(&string);
-        let score = score_with(model, &cipher_text);
-
-        if score < min_score {
-            min_score = score;
-            min_char  = *ch;
-        }
-    }
-
-    (min_char, min_score)
-}
-
 pub fn break_xor_char(model: &Histogram<u8>, charset: &[u8], string: &[u8]) -> (u8, Ratio<usize>) {
     max_char_with(model, charset, string)
 }
