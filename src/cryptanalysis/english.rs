@@ -2,6 +2,7 @@
 use std::convert::From;
 use super::frequency_analysis::Histogram;
 use super::break_xor_cipher;
+use num_rational::Ratio;
 
 
 pub const FREQUENCY_LIST: [(u8, usize); 53] = 
@@ -52,4 +53,10 @@ pub fn most_likely_char(cipher_text: &str) -> u8 {
     let charset = (0x00..0xFF).collect::<Vec<u8>>();
 
     break_xor_cipher::break_xor_char(&frequency_table, &charset.as_ref(), cipher_text.as_ref()).0
+}
+
+pub fn score(cipher_text: &[u8]) -> Ratio<usize> {
+    let model = Histogram::from(FREQUENCY_LIST.as_ref());
+
+    break_xor_cipher::score_with(&model, cipher_text)
 }

@@ -2,6 +2,8 @@ use std::string::String;
 use bitwise::hex_rep::ToHexRep;
 use bitwise::bitwiseops;
 use cryptanalysis::english;
+use std::fs::File;
+use std::path::Path;
 
 
 #[test]
@@ -43,4 +45,14 @@ fn test_challenge3() {
     assert_eq!(key, guessed_byte);
     assert_eq!(expected_plaintext.len(), guessed_plaintext.len());
     assert_eq!(expected_plaintext, guessed_plaintext);
+}
+
+#[test]
+fn test_challenge4_file_open() {
+    let handle = match File::open("data/set1/ex4.txt") {
+        Ok(f) => f,
+        Err(e) => panic!("file error: {}", e),
+    };
+
+    assert!(true);
 }
