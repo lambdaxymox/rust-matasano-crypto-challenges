@@ -31,38 +31,6 @@ fn repeat_char(character: u8, n: usize) -> Vec<u8> {
     iter::repeat(character).take(n).collect()
 }
 
-#[allow(unused_variables)]
-fn repeat_string(string: &[u8], n: usize) -> Vec<u8> {
-    let mut vec = Vec::new();
-
-    for i in 0..n {
-        for ch in string {
-            vec.push(*ch);
-        }
-    }
-
-    vec
-}
-
-#[allow(unused_variables)]
-fn with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
-    let rep_count = string.len() / key.len();
-    let remainder = string.len() % key.len();
-    let mut vec = Vec::new();
-
-    for i in 0..rep_count {
-        for ch in string {
-            vec.push(*ch);
-        }
-    }
-
-    for i in 0..remainder {
-        vec.push(string[i]);
-    }    
-
-    vec
-}
-
 fn op_with_char<F>(op: F, character: u8, string: &[u8]) -> Vec<u8>
     where F: Fn(&[u8], &[u8]) -> Vec<u8> {
 
@@ -75,12 +43,33 @@ pub fn xor_with_char(character: u8, string: &[u8]) -> Vec<u8> {
     op_with_char(&block_xor, character, string)
 }
 
+#[allow(unused_variables)]
+fn with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
+    let rep_count = string.len() / key.len();
+    let remainder = string.len() % key.len();
+    let mut vec   = Vec::new();
+
+    assert!(string.len() == rep_count*key.len() + remainder);
+
+    for i in 0..rep_count {
+        for ch in key {
+            vec.push(*ch);
+        }
+    }
+
+    for i in 0..remainder {
+        vec.push(key[i]);
+    }    
+
+    vec
+}
+
 fn op_with_key<F>(op: F, key: &[u8], string: &[u8]) -> Vec<u8>
     where F: Fn(&[u8], &[u8]) -> Vec<u8> {
 
     let other_string = with_key(key, string);
 
-    op(string, &other_string)
+    op(string, &other_string.as_ref())
 }
 
 pub fn xor_with_key(key: &[u8], string: &[u8]) -> Vec<u8> {

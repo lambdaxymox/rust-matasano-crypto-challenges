@@ -11,3 +11,8 @@ pub struct Challenge<'a> {
     pub func: fn() -> String,
 }
 
+impl<'a> Challenge<'a> {
+    pub fn execute(&self) -> String {
+        (self.func)()
+    }
+}
