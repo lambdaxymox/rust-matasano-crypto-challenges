@@ -2,7 +2,6 @@ use cryptanalysis::english;
 use bitwise::bitwiseops;
 use bitwise::hex_rep::ToHexRep;
 use challengeinfo::challenge::{Challenge, ChallengeInfo};
-use std::io;
 use std::io::{BufRead, BufReader};
 use std::fs::File;
 use num_rational::Ratio;

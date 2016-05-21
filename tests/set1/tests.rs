@@ -1,4 +1,3 @@
-use matasano_crypto_challenges::set1;
 use matasano_crypto_challenges::bitwise::base64;
 use matasano_crypto_challenges::bitwise::hex_rep::ToHexRep;
 use matasano_crypto_challenges::set1::challenge1::CHALLENGE1;
