@@ -24,7 +24,7 @@ pub fn max_char_with(model: &Histogram<u8>, charset: &[u8], string: &[u8]) -> (u
     
     for ch in charset {
         let cipher      = SingleCharXorCipher::new(*ch);
-        let cipher_text = cipher.process_block(&string);
+        let cipher_text = cipher.process_block(string);
         let score       = score_with(model, &cipher_text);
 
         if score >= max_score {

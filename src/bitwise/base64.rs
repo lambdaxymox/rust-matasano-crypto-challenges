@@ -12,13 +12,13 @@ fn config_base64() -> base64::Config {
     }
 }
 
-pub fn to_base64(string: &String) -> String {
+pub fn to_base64(string: &str) -> String {
     let slice: &[u8] = string.as_ref();
 
     (*slice).to_base64(config_base64())
 }
 
-pub fn from_base64(string: &String) -> Result<Vec<u8>, FromBase64Error> {
+pub fn from_base64(string: &str) -> Result<Vec<u8>, FromBase64Error> {
     let slice: &[u8] = string.as_ref();
 
     slice.from_base64()

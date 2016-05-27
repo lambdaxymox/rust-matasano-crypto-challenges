@@ -69,7 +69,7 @@ fn op_with_key<F>(op: F, key: &[u8], string: &[u8]) -> Vec<u8>
 
     let other_string = with_key(key, string);
 
-    op(string, &other_string.as_ref())
+    op(string, other_string.as_ref())
 }
 
 pub fn xor_with_key(key: &[u8], string: &[u8]) -> Vec<u8> {

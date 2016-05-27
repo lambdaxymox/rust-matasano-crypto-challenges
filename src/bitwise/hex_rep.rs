@@ -23,7 +23,7 @@ impl ToHexRep for String {
     fn to_hex(self: &String) -> Option<Vec<u8>> {
         let mut vec = Vec::new();
 
-        if self.len() <= 0 {
+        if self.is_empty() {
             return Some(vec);
         }
 
@@ -61,10 +61,8 @@ impl ToHexRep for String {
 
         for character in slice {
             match *character {
-                0x30...0x39 => continue,
-                0x41...0x46 => continue,
-                0x61...0x66 => continue,
-                _           => return false,
+                0x30...0x39 | 0x41...0x46 | 0x61...0x66 => continue,
+                _                                       => return false,
             }
         }
 

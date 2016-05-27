@@ -36,6 +36,10 @@ impl<T> Histogram<T> where T: Eq + Hash {
         self.inner.len()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
     pub fn transpose(&self, reference: &Histogram<T>) -> Histogram<T> 
         where T: Copy + Clone + Ord {
 
@@ -44,13 +48,13 @@ impl<T> Histogram<T> where T: Eq + Hash {
 
         let mut keys = Vec::new();
         for key in reference.inner.keys() {
-            keys.push(key.clone());
+            keys.push(*key);
         }
         keys.sort();
 
         let mut values = Vec::new();
         for value in self.inner.values() {
-            values.push(value.clone());
+            values.push(*value);
         }
         values.sort();
 
