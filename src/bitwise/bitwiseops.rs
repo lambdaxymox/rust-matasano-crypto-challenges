@@ -142,14 +142,14 @@ pub fn mean_edit_distance(strings: &[&[u8]]) -> Option<Ratio<usize>> {
 
     let seq1: Vec<&[u8]> = strings.into_iter()
                                   .take(strings.len()-1)
-                                  .map(|slice| { slice.clone() })
+                                  .map(|slice| { *slice })
                                   .collect();
 
     let seq2: Vec<&[u8]> = strings.into_iter()
                                   .skip(1)
-                                  .map(|slice| { slice.clone() })
+                                  .map(|slice| { *slice })
                                   .collect();
-                                  
+
     let dist  = total_edit_distance(seq1.as_ref(), seq2.as_ref());
     let total = length(strings);
 

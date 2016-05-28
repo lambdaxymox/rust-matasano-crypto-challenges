@@ -50,9 +50,9 @@ fn guess_chunked_key_size(chunk_count: usize, keysizes: &[usize], buf: &[u8]) ->
         
         if byte_count <= buf.len() {
             let chunks: Vec<&[u8]> = buf.chunks(*keysize)
-                                     .take(chunk_count)
-                                     .collect();
-
+                                        .take(chunk_count)
+                                        .collect();
+  
             let score = bitwiseops::mean_edit_distance(chunks.as_ref()).unwrap();
             if score <= min_score {
                 min_score = score;

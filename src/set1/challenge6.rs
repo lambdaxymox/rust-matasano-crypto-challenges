@@ -1,4 +1,3 @@
-use bitwise::bitwiseops;
 use bitwise::base64;
 use challengeinfo::challenge::{Challenge, ChallengeInfo};
 use std::fs::File;
@@ -27,8 +26,8 @@ fn execute() -> String {
 
     let handle = File::open(FILE).unwrap();
     let reader = BufReader::new(handle);
-    let mut buffer = Vec::<u8>::new();
 
+    let mut buffer = Vec::<u8>::new();
     for line in reader.lines() {
         let line = line.unwrap();
         buffer.extend_from_slice(line.as_bytes());
