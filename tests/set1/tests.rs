@@ -5,6 +5,7 @@ use matasano_crypto_challenges::set1::challenge2::CHALLENGE2;
 use matasano_crypto_challenges::set1::challenge3::CHALLENGE3;
 use matasano_crypto_challenges::set1::challenge4::CHALLENGE4;
 use matasano_crypto_challenges::set1::challenge5::CHALLENGE5;
+use matasano_crypto_challenges::set1::challenge6::CHALLENGE6;
 
 
 #[test]
@@ -45,4 +46,12 @@ fn test_challenge5() {
     let result = CHALLENGE5.execute();
 
     assert_eq!(result.as_bytes(), expected.as_slice());
+}
+
+#[test]
+fn test_challenge6() {
+    let result = CHALLENGE6.execute();
+    let expected = "T+rminator X: Bring the noise";
+
+    assert_eq!(result, expected);
 }

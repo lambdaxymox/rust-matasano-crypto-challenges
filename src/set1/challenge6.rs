@@ -3,6 +3,7 @@ use challengeinfo::challenge::{Challenge, ChallengeInfo};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::string::String;
+use cryptanalysis::english;
 use cryptanalysis::break_xor_cipher;
 
 
@@ -36,6 +37,8 @@ fn execute() -> String {
     buffer = base64::from_base64(String::from_utf8(buffer).unwrap().as_str()).unwrap();
 
     let guessed_keysize = break_xor_cipher::guess_key_size(keysizes.as_ref(), buffer.as_ref());
+    let key = english::most_likely_key(buffer.as_ref(), guessed_keysize);
 
-    String::from("")
+
+    String::from_utf8(key).unwrap()
 }

@@ -47,3 +47,10 @@ pub fn score(cipher_text: &[u8]) -> Ratio<usize> {
 
     break_xor_cipher::score_with(&model, cipher_text)
 }
+
+pub fn most_likely_key(cipher_text: &[u8], keysize: usize) -> Vec<u8> {
+    let model = Histogram::from(FREQUENCY_LIST.as_ref());
+    let charset = (0x00..0xFF).collect::<Vec<u8>>();
+    
+    break_xor_cipher::break_xor_key(&model, charset.as_ref(), keysize, cipher_text)
+}
