@@ -7,6 +7,8 @@ use std::fs::File;
 use num_rational::Ratio;
 
 
+pub const FILE: &'static str = "data/set1/ex4.txt";
+
 pub const INFO4: ChallengeInfo<'static> = ChallengeInfo {
     set_number: 4,
     challenge_number: 4,
@@ -24,7 +26,7 @@ fn execute() -> String {
 
     let expected_plaintext = Vec::from("Now that the party is jumping\n");
 
-    let handle = File::open("data/set1/ex4.txt").unwrap();
+    let handle = File::open(FILE).unwrap();
     let reader = BufReader::new(handle);
 
     let mut best_score = Ratio::from_integer(0);

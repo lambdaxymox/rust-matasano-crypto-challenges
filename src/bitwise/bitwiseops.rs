@@ -1,6 +1,7 @@
 use std::ops::BitXor;
 use std::cmp;
 use std::iter;
+use num_rational::Ratio;
 
 
 pub fn block_xor<T>(block1: &[T], block2: &[T]) -> Vec<T::Output> 
@@ -99,4 +100,63 @@ pub fn edit_distance(str1: &[u8], str2: &[u8]) -> Option<usize> {
     }
 
     Some(dist)
+}
+
+pub fn normalized_edit_distance(str1: &[u8], str2: &[u8]) -> Option<Ratio<usize>> {
+    let dist = edit_distance(str1, str2);
+    let normalized_edit_distance = match dist {
+        None       => None,
+        Some(edit_dist) => Some(Ratio::new_raw(edit_dist, str1.len())),
+    };
+
+    normalized_edit_distance
+}
+
+fn total_edit_distance(seq1: &[&[u8]], seq2: &[&[u8]]) -> Option<usize> {
+    if seq1.is_empty() || seq2.is_empty() {
+        return None;
+    }
+
+    if seq1.len() != seq2.len() {
+        return None;
+    }
+
+    for (str1, str2) in seq1.into_iter().zip(seq2) {
+        if str1.len() != str2.len() {
+            return None;
+        }
+    }
+
+    let edit_dist = seq1.into_iter().zip(seq2).fold(0, |dist, (str1, str2)| { 
+        dist + edit_distance(str1, str2).unwrap()
+    });
+
+    Some(edit_dist)
+}
+
+pub fn mean_edit_distance(strings: &[&[u8]]) -> Option<Ratio<usize>> {
+    let length = |strings: &[&[u8]]| { 
+        strings.into_iter()
+               .fold(0, |acc, st| { acc + st.len() }) 
+    };
+
+    let seq1: Vec<&[u8]> = strings.into_iter()
+                                  .take(strings.len()-1)
+                                  .map(|slice| { slice.clone() })
+                                  .collect();
+
+    let seq2: Vec<&[u8]> = strings.into_iter()
+                                  .skip(1)
+                                  .map(|slice| { slice.clone() })
+                                  .collect();
+                                  
+    let dist  = total_edit_distance(seq1.as_ref(), seq2.as_ref());
+    let total = length(strings);
+
+    let mean = match dist {
+        None      => None,
+        Some(val) => Some(Ratio::new_raw(val, total)),
+    };
+
+    mean
 }

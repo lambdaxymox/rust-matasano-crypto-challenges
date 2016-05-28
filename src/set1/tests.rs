@@ -3,6 +3,7 @@ use bitwise::hex_rep::ToHexRep;
 use bitwise::bitwiseops;
 use cryptanalysis::english;
 use std::fs::File;
+use set1::{challenge4, challenge6};
 
 
 #[test]
@@ -48,7 +49,7 @@ fn test_challenge3() {
 
 #[test]
 fn test_challenge4_file_exists() {
-    let handle = File::open("data/set1/ex4.txt");    
+    let handle = File::open(challenge4::FILE);    
 
     assert!(handle.is_ok());
 }
@@ -67,12 +68,12 @@ fn test_challenge5() {
 
 #[test]
 fn test_challenge6_file_exists() {
-    let handle = File::open("data/set1/ex6.txt");    
+    let handle = File::open(challenge6::FILE);    
 
     assert!(handle.is_ok());
 }
 
 #[test]
 fn test_challenge6() {
-    
+
 }

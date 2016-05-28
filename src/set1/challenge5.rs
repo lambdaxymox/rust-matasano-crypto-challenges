@@ -3,11 +3,11 @@ use challengeinfo::challenge::{Challenge, ChallengeInfo};
 
 
 pub const INFO5: ChallengeInfo<'static> = ChallengeInfo {
-    set_number: 4,
-    challenge_number: 4,
-    title: "Detect single-character XOR",
+    set_number: 5,
+    challenge_number: 5,
+    title: "Implement repeating-key XOR",
     description: "",
-    url: "http://cryptopals.com/sets/1/challenges/4",
+    url: "http://cryptopals.com/sets/1/challenges/5",
 };
 
 pub const CHALLENGE5: Challenge<'static> = Challenge {
