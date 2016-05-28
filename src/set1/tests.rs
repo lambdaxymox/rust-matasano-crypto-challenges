@@ -47,7 +47,7 @@ fn test_challenge3() {
 }
 
 #[test]
-fn test_challenge4_file_open() {
+fn test_challenge4_file_exists() {
     let handle = File::open("data/set1/ex4.txt");    
 
     assert!(handle.is_ok());
@@ -63,4 +63,16 @@ fn test_challenge5() {
 
     assert_eq!(result.len(), ciphertext.len());
     assert_eq!(result.as_slice(), ciphertext.as_slice());
+}
+
+#[test]
+fn test_challenge6_file_exists() {
+    let handle = File::open("data/set1/ex6.txt");    
+
+    assert!(handle.is_ok());
+}
+
+#[test]
+fn test_challenge6() {
+    
 }

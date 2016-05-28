@@ -57,9 +57,9 @@ fn with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
         }
     }
 
-    for i in 0..remainder {
-        vec.push(key[i]);
-    }    
+    for item in key.iter().take(remainder) {
+        vec.push(*item);
+    }
 
     vec
 }
@@ -74,4 +74,29 @@ fn op_with_key<F>(op: F, key: &[u8], string: &[u8]) -> Vec<u8>
 
 pub fn xor_with_key(key: &[u8], string: &[u8]) -> Vec<u8> {
     op_with_key(&block_xor, key, string)
+}
+
+pub fn edit_distance(str1: &[u8], str2: &[u8]) -> Option<usize> {
+    let hmetric = |x, y| { 
+        let mut val  = x ^ y;
+        let mut dist = 0;
+
+        while val != 0 {
+            dist += 1;
+            val  &= val - 1;
+        }
+
+        dist
+    };
+
+    if str1.len() != str2.len() {
+        return None;
+    }
+
+    let mut dist = 0;
+    for (byte1, byte2) in str1.into_iter().zip(str2) {
+        dist += hmetric(byte1, byte2);
+    }
+
+    Some(dist)
 }

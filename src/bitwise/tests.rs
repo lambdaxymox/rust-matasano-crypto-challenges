@@ -1,5 +1,6 @@
 use super::base64;
 use super::hex_rep::ToHexRep;
+use super::bitwiseops;
 
 #[test]
 fn test_to_base64() {
@@ -25,4 +26,22 @@ fn test_to_hex() {
 
     assert_eq!(expected.len(), result.len());
     assert_eq!(expected, result);
+}
+
+#[test]
+fn test_edit_dist() {
+    let str1 = "this is a test";
+    let str2 = "wokka wokka!!!";
+    let dist = bitwiseops::edit_distance(str1.as_ref(), str2.as_ref()).unwrap();
+
+    assert_eq!(dist, 37);
+}
+
+#[test]
+fn test_edit_dist_should_reject_mismatched_length_strings() {
+    let str1 = "this is a test";
+    let str2 = "this is a malformed string";
+    let dist = bitwiseops::edit_distance(str1.as_ref(), str2.as_ref());
+
+    assert!(dist.is_none());
 }
