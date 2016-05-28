@@ -104,12 +104,11 @@ pub fn edit_distance(str1: &[u8], str2: &[u8]) -> Option<usize> {
 
 pub fn normalized_edit_distance(str1: &[u8], str2: &[u8]) -> Option<Ratio<usize>> {
     let dist = edit_distance(str1, str2);
-    let normalized_edit_distance = match dist {
-        None       => None,
+    
+    match dist {
+        None            => None,
         Some(edit_dist) => Some(Ratio::new_raw(edit_dist, str1.len())),
-    };
-
-    normalized_edit_distance
+    }
 }
 
 fn total_edit_distance(seq1: &[&[u8]], seq2: &[&[u8]]) -> Option<usize> {
@@ -153,10 +152,8 @@ pub fn mean_edit_distance(strings: &[&[u8]]) -> Option<Ratio<usize>> {
     let dist  = total_edit_distance(seq1.as_ref(), seq2.as_ref());
     let total = length(strings);
 
-    let mean = match dist {
+    match dist {
         None      => None,
         Some(val) => Some(Ratio::new_raw(val, total)),
-    };
-
-    mean
+    }
 }
